@@ -1,0 +1,21 @@
+{
+    "projectName": "Expenses",
+    "username": "acanavesi@altimetrik.com",
+    "id": "ff315ec0-abfd-11e6-b873-75a97c0763e8",
+    "namespace": "",
+    "orgType": "developer",
+    "loginUrl": "https://login.salesforce.com/",
+    "instanceUrl": "https://na35.salesforce.com",
+    "workspace": "C:\\Users\\acanavesi\\Documents",
+    "subscription": [
+        "ApexClass",
+        "ApexComponent",
+        "ApexPage",
+        "ApexTrigger",
+        "ApprovalProcess",
+        "CustomApplication",
+        "CustomMetadata",
+        "CustomObject",
+        "StaticResource"
+    ]
+}
