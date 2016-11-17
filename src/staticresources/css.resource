@@ -1,3 +1,3 @@
 .expenses_table tbody tr:nth-child(odd) {
-   background-color: #d3d3d3;
-}
+   background-color: #a3d3d3;
+} 

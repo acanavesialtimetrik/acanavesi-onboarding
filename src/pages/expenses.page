@@ -1,11 +1,9 @@
 <apex:page controller="ExpensesController">
 <apex:stylesheet value="{!$Resource.css}"/>
 
-
-
     <apex:form >
         <apex:pageBlock title="Expenses list" id="expenses_list">
-            Filter:
+            
             <apex:selectList value="{! selectedType }" size="1" >
                 <apex:selectOptions value="{! typeOptions }" />
             </apex:selectList>
@@ -22,6 +20,10 @@
                           <apex:column value="{! e.Tax__c }"/>
                           <apex:column value="{! e.Client_Company__c }"/>
                           <apex:column value="{! e.Submitted__c }"/>
+                          <apex:column >
+							<apex:facet name="header">Action</apex:facet>
+							<a href="/{!e.Id}" id="{!e.Id}" onblur="LookupHoverDetail.getHover('{!e.Id}').hide();" onfocus="LookupHoverDetail.getHover('{!e.Id}', '/{!e.Id}/m?retURL=%2F{!e.Id}&isAjaxRequest=1').show();" onmouseout="LookupHoverDetail.getHover('{!e.Id}').hide();" onmouseover="LookupHoverDetail.getHover('{!e.Id}', '/{!e.Id}/m?retURL=%2F{!e.Id}&isAjaxRequest=1').show();">Detail</a>
+                          </apex:column>
     		        </apex:pageBlockTable>
         </apex:pageBlock>
 
