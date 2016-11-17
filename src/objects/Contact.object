@@ -326,4 +326,17 @@
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
+    <webLinks>
+        <fullName>Contact_expenses</fullName>
+        <availability>online</availability>
+        <description>Redirect to a page for displaying contacts´s expenses</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Contact expenses</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/expenses?employeeId={!Contact.Id}</url>
+    </webLinks>
 </CustomObject>
