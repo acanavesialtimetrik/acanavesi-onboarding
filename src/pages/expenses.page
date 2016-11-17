@@ -1,22 +1,32 @@
 <apex:page controller="ExpensesController">
+<apex:stylesheet value="{!$Resource.css}"/>
+
+
+
     <apex:form >
         <apex:pageBlock title="Expenses list" id="expenses_list">
-            Filter: 
+            Filter:
             <apex:selectList value="{! selectedType }" size="1" >
                 <apex:selectOptions value="{! typeOptions }" />
-            </apex:selectList> 
-            <apex:commandButton action="{! refreshData}" value="Filter" status="myStatus"/>
+            </apex:selectList>
+            <apex:commandButton action="{! refreshData}" value="Filter" status="myStatus" />
             <apex:actionStatus startText="Loading..." id="myStatus"  />
-            <br/><br/> 
-			<apex:pageBlockTable value="{! expenses }" var="e">
-                <apex:column value="{! e.Name }"/>
-                <apex:column value="{! e.Type__c }"/>
-                <apex:column value="{! e.Employee__c }"/>
-    		</apex:pageBlockTable>
+            <br/><br/>
+            <apex:outputLabel value="Employee: {!employee.Name}" rendered="{!IF(ISNULL(employee) , false , true)}" /> 
+              <br/><br/>
+			         <apex:pageBlockTable value="{! expenses }" var="e" styleClass="expenses_table">
+                          <apex:column value="{! e.Employee__c }"/>
+                          <apex:column value="{! e.Category__c }"/>
+                          <apex:column value="{! e.Type__c }"/>
+                          <apex:column value="{! e.Amount__c }"/>
+                          <apex:column value="{! e.Tax__c }"/>
+                          <apex:column value="{! e.Client_Company__c }"/>
+                          <apex:column value="{! e.Submitted__c }"/>
+    		        </apex:pageBlockTable>
         </apex:pageBlock>
-        
+
     </apex:form>
 
 
-    
+
 </apex:page>
