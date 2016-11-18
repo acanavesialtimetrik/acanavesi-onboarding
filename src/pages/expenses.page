@@ -2,17 +2,20 @@
 <apex:stylesheet value="{!$Resource.css}"/>
 
     <apex:form >
-        <apex:pageBlock title="Expenses list" id="expenses_list">
+        <apex:pageBlock title="Expenses list" id="expensesPanel">
             
             <apex:selectList value="{! selectedType }" size="1" >
                 <apex:selectOptions value="{! typeOptions }" />
             </apex:selectList>
-            <apex:commandButton action="{! refreshData}" value="Filter" status="myStatus" />
+            <apex:selectList value="{! selectedStatus }" size="1" >
+                <apex:selectOptions value="{! statusOptions }" />
+            </apex:selectList>
+            <apex:commandButton action="{! refreshData}" value="Filter" status="myStatus" reRender="expensesPanel" />
             <apex:actionStatus startText="Loading..." id="myStatus"  />
             <br/><br/>
             <apex:outputLabel value="Employee: {!employee.Name}" rendered="{!IF(ISNULL(employee) , false , true)}" /> 
               <br/><br/>
-			         <apex:pageBlockTable value="{! expenses }" var="e" styleClass="expenses_table">
+			         <apex:pageBlockTable value="{! expenses }" var="e" styleClass="expenses_table" id="expensesTable">
                           <apex:column value="{! e.Employee__c }"/>
                           <apex:column value="{! e.Category__c }"/>
                           <apex:column value="{! e.Type__c }"/>
