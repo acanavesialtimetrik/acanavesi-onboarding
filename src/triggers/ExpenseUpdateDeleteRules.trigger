@@ -10,7 +10,7 @@ trigger ExpenseUpdateDeleteRules on Expense__c (before update, before delete) {
     } else if(Trigger.isUpdate){
         for (Expense__c expense : Trigger.Old) {
             if(expense.Submitted__c){
-                Trigger.oldMap.get(expense.Id).addError('Cannot update submitted expenses');
+                //Trigger.oldMap.get(expense.Id).addError('Cannot update submitted expenses');
             } 
         }
     }
