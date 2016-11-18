@@ -1,0 +1,14 @@
+<apex:page renderAs="Pdf" title="Expenses" controller="ExpensesController">
+     <apex:pageBlock title="Expenses" >
+        <apex:pageBlockTable value="{! expenses }" var="e" styleClass="expenses_table" id="expensesTable">
+              <apex:column value="{! e.expenseC.Employee__c }"/>
+              <apex:column value="{! e.expenseC.Category__c }"/>
+              <apex:column value="{! e.expenseC.Type__c }"/>
+              <apex:column value="{! e.expenseC.Amount__c }"/>
+              <apex:column value="{! e.expenseC.Tax__c }"/>
+              <apex:column value="{! e.expenseC.Client_Company__c }"/>
+              <apex:column value="{! e.expenseC.Submitted__c }"/>
+            
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:page>
