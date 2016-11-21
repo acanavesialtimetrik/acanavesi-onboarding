@@ -1,8 +1,8 @@
 public class TestUtils {
 
     public static void createRandomExpenses(){
-        createRandomExpenses(10);
-        createRandomExpensesWithAmountGreaterThan5000(10);
+        createRandomExpenses(40);
+        createRandomExpensesWithAmountGreaterThan5000(40);
     }
         
     /**

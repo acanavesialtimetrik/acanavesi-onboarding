@@ -171,6 +171,7 @@ private class ExpensesControllerTest {
      
     @isTest static void markSelectedAsSubmittedTest() {
     	ExpensesController expensesController = new ExpensesController();
+    	expensesController.pageSize = 100;
     	
     	//build a list with all not submitted expenses to mark them all as submitted later
     	List<Expense__c> expensesC = new List<Expense__c>();
@@ -205,6 +206,36 @@ private class ExpensesControllerTest {
 			System.assert(!expense.selected);    		
     	}
     	
+     }
+     
+     @isTest static void paginationTest() {
+    	ExpensesController expensesController = new ExpensesController();
+    	
+    	//I will use a page size of 1 and assert the next page contains a different expense
+    	expensesController.pageSize = 1;
+    	
+    	List<ExpenseWrapper> expensesPage1 = expensesController.expenses;
+		System.assert(expensesPage1 != null);
+		System.assert(!expensesPage1.isempty());
+		Expense__c expensePage1 = expensesPage1.get(0).expenseC;
+    	
+    	expensesController.nextPage();
+    	
+    	List<ExpenseWrapper> expensesPage2 = expensesController.expenses;
+		System.assert(expensesPage2 != null);
+		System.assert(!expensesPage2.isempty());
+		Expense__c expensePage2 = expensesPage2.get(0).expenseC;
+		
+		System.assertNotEquals(expensePage1.Id, expensePage2.Id, 'Next page contains the same record');
+    	
+    	//call the previous page and assert it is the same record than expensePage1
+    	expensesController.previousPage();
+    	expensesPage1 = expensesController.expenses;
+		System.assert(expensesPage1 != null);
+		System.assert(!expensesPage1.isempty());
+		expensePage1 = expensesPage1.get(0).expenseC;
+		
+		System.assertEquals(expensePage1.Id, expensePage1.Id, 'previous page does not contain the same record than the page 1');
      }
      
      
