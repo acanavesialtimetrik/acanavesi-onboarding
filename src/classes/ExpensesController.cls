@@ -11,6 +11,9 @@ public class ExpensesController {
     public Boolean allChecked { get; set; }
     //the list of url parameters for the page that exports expenses to pdf. These parameters could be employeeId, expenseType or status
     public String expensesAsPdfParams {get; set;}
+    
+    public integer pageNumber {get; set;}
+    public integer pageSize {get; set;}
 
     public ExpensesController() {
         typeOptions = new List<SelectOption>();
@@ -26,6 +29,8 @@ public class ExpensesController {
         selectedStatus = statusOptions.get(0).getValue();
 
         allChecked = false;
+        pageNumber = 0;
+        pageSize = 2;
 
         setUpUrlParameters();
         refreshData();
@@ -86,10 +91,13 @@ public class ExpensesController {
         if(condition.length() > 0 ){
           condition = condition.replaceFirst('AND', ' WHERE ');
         }
+        
+        integer fromRecord = pageNumber * pageSize;
+        
         String query = String.escapeSingleQuotes(' SELECT  Employee__c, Category__c, Type__c, Amount__c, Tax__c, Client_Company__c, Submitted__c' +
         ' FROM Expense__c ' +
         condition+
-        ' LIMIT 100'); //TODO do pagination
+        ' LIMIT '+pageSize+' OFFSET '+fromRecord); 
         
         System.debug(query);
 
@@ -104,6 +112,18 @@ public class ExpensesController {
             expenses.add(expenseW);
         }
         
+        return null;
+    }
+    
+    public PageReference nextPage(){
+        pageNumber++;
+        refreshData();
+        return null;
+    }
+    
+    public PageReference previousPage(){
+        pageNumber--;
+        refreshData();
         return null;
     }
     
