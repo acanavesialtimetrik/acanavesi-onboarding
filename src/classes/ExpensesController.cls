@@ -25,10 +25,9 @@ public class ExpensesController {
         statusOptions.add(new SelectOption('Not submitted', 'Not submitted'));
         selectedStatus = statusOptions.get(0).getValue();
 
-        setUpUrlParameters();
-        
         allChecked = false;
-        
+
+        setUpUrlParameters();
         refreshData();
     }
     
