@@ -1,0 +1,3 @@
+{!Expense__c.OwnerFullName},
+
+Your expense {!Expense__c.Id} was rejected ($ {!Expense__c.Amount__c})

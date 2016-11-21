@@ -1,0 +1,3 @@
+{!Expense__c.Employee__c},
+
+Your expense {!Expense__c.Name} was approved ($ {!Expense__c.Amount__c})

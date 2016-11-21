@@ -1,0 +1,9 @@
+{!User.Name},
+
+The following expense is pending for your approval:
+
+{!Expense__c.Link}
+
+Employee: {!Expense__c.Employee__c}
+Amount: {!Expense__c.Amount__c}
+Tax:  {!Expense__c.Tax__c}

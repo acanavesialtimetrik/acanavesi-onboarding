@@ -1,0 +1,17 @@
+{!Expense__c.Employee__c},
+
+This is your expense detail:
+
+Name: {!Expense__c.Name}
+Amount: {!Expense__c.Amount__c}
+Tax: {!Expense__c.Tax__c}
+Category: {!Expense__c.Category__c}
+Other category (if apply): {!Expense__c.Other_Category__c}
+Type: {!Expense__c.Type__c}
+Link: {!Expense__c.Link} 
+Status: {!Expense__c.Expense_Status__c}
+Client name: {!Expense__c.Client_Name__c}
+Client company: {!Expense__c.Client_Company__c}
+Project name: {!Expense__c.Project_Name__c}
+Travel region: {!Expense__c.Travel_region__c}
+Travel country: {!Expense__c.Travel_country__c}
