@@ -19,31 +19,37 @@
             </apex:outputPanel>
            
             <apex:commandButton action="{! markSelectedAsSubmitted}" value="Mark selected as submitted" status="myStatus" reRender="expensesPanel" />
-               <br/><br/> 
-               <apex:outputLink value="expensesAsPdf{!expensesAsPdfParams}">Export as Pdf</apex:outputLink>
-               <br/><br/>
-			         <apex:pageBlockTable value="{! expenses }" var="e" styleClass="expenses_table" id="expensesTable">
-			             <apex:column >
-			                 <apex:facet name="header">
-                                 <apex:inputCheckbox value="{!allChecked}">
-                                    <apex:actionSupport event="onclick" action="{!checkUncheck}" rerender="expensesTable" status="myStatus" />
-                                </apex:inputCheckbox>
-                             </apex:facet>
-                             <apex:inputCheckbox value="{!e.selected}"/>
-			             </apex:column>
-			             
-                          <apex:column value="{! e.expenseC.Employee__c }"/>
-                          <apex:column value="{! e.expenseC.Category__c }"/>
-                          <apex:column value="{! e.expenseC.Type__c }"/>
-                          <apex:column value="{! e.expenseC.Amount__c }"/>
-                          <apex:column value="{! e.expenseC.Tax__c }"/>
-                          <apex:column value="{! e.expenseC.Client_Company__c }"/>
-                          <apex:column value="{! e.expenseC.Submitted__c }"/>
-                          <apex:column >
-						      <apex:facet name="header">Action</apex:facet>
-							      <a href="/{!e.expenseC.Id}" id="{!e.expenseC.Id}" onblur="LookupHoverDetail.getHover('{!e.expenseC.Id}').hide();" onfocus="LookupHoverDetail.getHover('{!e.expenseC.Id}', '/{!e.expenseC.Id}/m?retURL=%2F{!e.expenseC.Id}&isAjaxRequest=1').show();" onmouseout="LookupHoverDetail.getHover('{!e.expenseC.Id}').hide();" onmouseover="LookupHoverDetail.getHover('{!e.expenseC.Id}', '/{!e.expenseC.Id}/m?retURL=%2F{!e.expenseC.Id}&isAjaxRequest=1').show();">Detail</a>
-                              </apex:column>
-    		        </apex:pageBlockTable>
+            <br/><br/> 
+            <apex:outputLink value="expensesAsPdf{!expensesAsPdfParams}">Export as Pdf</apex:outputLink>
+            <br/><br/>
+            <!-- Pagination -->
+            Page: <apex:outputText value=" {!PageNumber}"/>
+            <apex:commandLink action="{! previousPage }" value="Previous"/>
+            <span> / </span>
+            <apex:commandLink action="{! nextPage }" value="Next"/>
+            <br/><br/>
+	        <apex:pageBlockTable value="{! expenses }" var="e" styleClass="expenses_table" id="expensesTable">
+	             <apex:column >
+	                 <apex:facet name="header">
+                         <apex:inputCheckbox value="{!allChecked}">
+                            <apex:actionSupport event="onclick" action="{!checkUncheck}" rerender="expensesTable" status="myStatus" />
+                        </apex:inputCheckbox>
+                     </apex:facet>
+                     <apex:inputCheckbox value="{!e.selected}"/>
+	             </apex:column>
+	             
+                  <apex:column value="{! e.expenseC.Employee__c }"/>
+                  <apex:column value="{! e.expenseC.Category__c }"/>
+                  <apex:column value="{! e.expenseC.Type__c }"/>
+                  <apex:column value="{! e.expenseC.Amount__c }"/>
+                  <apex:column value="{! e.expenseC.Tax__c }"/>
+                  <apex:column value="{! e.expenseC.Client_Company__c }"/>
+                  <apex:column value="{! e.expenseC.Submitted__c }"/>
+                  <apex:column >
+				      <apex:facet name="header">Action</apex:facet>
+					      <a href="/{!e.expenseC.Id}" id="{!e.expenseC.Id}" onblur="LookupHoverDetail.getHover('{!e.expenseC.Id}').hide();" onfocus="LookupHoverDetail.getHover('{!e.expenseC.Id}', '/{!e.expenseC.Id}/m?retURL=%2F{!e.expenseC.Id}&isAjaxRequest=1').show();" onmouseout="LookupHoverDetail.getHover('{!e.expenseC.Id}').hide();" onmouseover="LookupHoverDetail.getHover('{!e.expenseC.Id}', '/{!e.expenseC.Id}/m?retURL=%2F{!e.expenseC.Id}&isAjaxRequest=1').show();">Detail</a>
+                      </apex:column>
+	          </apex:pageBlockTable>
         </apex:pageBlock>
 
     </apex:form>

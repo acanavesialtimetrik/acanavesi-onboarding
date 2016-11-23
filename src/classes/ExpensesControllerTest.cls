@@ -4,71 +4,12 @@
 @isTest
 private class ExpensesControllerTest {
 	
-	
-	/////////////////////////////////////// Util methods ////////////////////////////////////
 	/**
 	 * This method is executed for each test method.
 	 */
-	@testSetup static void createRandomExpenses(){
-	
-		List<Expense__c> expenses = new List<Expense__c>();
-		for(integer i=0; i<10; i++){
-			Expense__c expense = new Expense__c();
-			expense.Name = 'expense'+1;
-			
-			Contact employee = new Contact();
-			employee.LastName = 'Test'+i;
-			insert employee; 
-			
-			expense.Employee__c = employee.Id;
-			
-			//just for generating expenses with business trips and clients meetings	types
-			if(math.mod(i, 2) == 0){
-				expense.Type__c = 'Business trips';
-				expense.Travel_country__c = 'India';
-				expense.Travel_region__c = 'Asia';
-			}else{
-				expense.Type__c = 'Client meetings';
-				expense.Employee__c = employee.Id;
-				
-			}
-			expense.Amount__c = 1000*1; 
-			expense.Category__c = 'Transportation';
-			expense.Client_Company__c = 'Company'+1;
-			
-			if(getRandomBoolean()){
-				expense.Submitted__c = false;
-				expense.Expense_Status__c = 'NOT SUBMITTED';
-			}else{
-				expense.Submitted__c = true;
-				expense.Expense_Status__c = 'SUBMITTED';
-			}
-			
-			expenses.add(expense);
-		}
-		insert expenses;
+	@testSetup static void setup(){
+		TestUtils.createRandomExpenses();
 	}
-	
-	private static Boolean getRandomBoolean(){
-         return math.mod(getRandomNumber(10),2) == 0;
-    }
-    
-    private static Integer getRandomNumber(Integer size){
-          Double d = math.random() * size;
-          return d.intValue();
-     }
-	
-	/**
-	 * Returns the first contact in the database 
-	 */
-	static Contact getAContact(){
-		List<Contact> employees = [select Id from Contact limit 1];
-    	System.assert(employees != null);
-    	System.assert(!employees.isempty());
-    	return  employees.get(0);
-	}
-	
-	/////////////////////////////////////// End util methods ////////////////////////////////////////
 
 	/**
 	 * Tests that the controller filters by the two types
@@ -101,7 +42,7 @@ private class ExpensesControllerTest {
 	 * Tests that the controller filters by the employee id given in the URL
 	 */
     @isTest static void filterByEmployeeTest() {
-    	Contact employee = getAContact();
+    	Contact employee = TestUtils.getAContact();
 		
 		//set the page URL for the employeeId
 		PageReference pf = Page.expenses;
@@ -125,7 +66,7 @@ private class ExpensesControllerTest {
 	 * Tests that the controller filters by the two critereas: employee id and type
 	 */
     @isTest static void filterByTypeAndEmployeeTest() {
-    	Contact employee = getAContact();
+    	Contact employee = TestUtils.getAContact();
     	
     	PageReference pf = Page.expenses;
 		Test.setCurrentPage(pf);
@@ -162,7 +103,7 @@ private class ExpensesControllerTest {
      }
      
     static void filterByStatus(String status){
-     	Contact employee = getAContact();
+     	Contact employee = TestUtils.getAContact();
 		
 		//set the page URL for the employeeId
 		PageReference pf = Page.expenses;
@@ -192,7 +133,7 @@ private class ExpensesControllerTest {
     	Expense__c expense = [select Id from Expense__c where Submitted__c = true limit 1];
     	
     	//test update
-    	expense.Client_Company__c = 'Random'+getRandomNumber(10);
+    	expense.Client_Company__c = 'Random'+TestUtils.getRandomNumber(10);
     	Database.SaveResult saveResult = Database.update(expense, false);
 		System.assert(!saveResult.isSuccess());
     	System.assert(saveResult.getErrors().size() > 0);
@@ -207,17 +148,17 @@ private class ExpensesControllerTest {
      * We can update or delete expenses while they are not submitted. This test checks that
      */
      @isTest static void updateDeleteNotSubmittedExpenseTest() {
-    	List<Expense__c> expenses = [select Id from Expense__c where Submitted__c = false];
+    	List<Expense__c> expenses = [select Client_Company__c from Expense__c where Submitted__c = false];
     	
     	//I use a random string for all expenses in order to check later
-    	String randomString = 'random'+getRandomNumber(10);
+    	String randomString = 'random'+TestUtils.getRandomNumber(10);
     	for(Expense__c expense : expenses){
     		expense.Client_Company__c = randomString;
     	}
     	
     	//test update
     	update expenses;
-    	List<Expense__c> updatedExpenses = [select Id from Expense__c where Submitted__c = false];
+    	List<Expense__c> updatedExpenses = [select Client_Company__c from Expense__c where Submitted__c = false];
     	for(Expense__c expense : updatedExpenses){
     		 System.assertEquals(randomString, expense.Client_Company__c, 'At least one expense was not updated');
     	}
@@ -230,6 +171,7 @@ private class ExpensesControllerTest {
      
     @isTest static void markSelectedAsSubmittedTest() {
     	ExpensesController expensesController = new ExpensesController();
+    	expensesController.pageSize = 100;
     	
     	//build a list with all not submitted expenses to mark them all as submitted later
     	List<Expense__c> expensesC = new List<Expense__c>();
@@ -264,6 +206,36 @@ private class ExpensesControllerTest {
 			System.assert(!expense.selected);    		
     	}
     	
+     }
+     
+     @isTest static void paginationTest() {
+    	ExpensesController expensesController = new ExpensesController();
+    	
+    	//I will use a page size of 1 and assert the next page contains a different expense
+    	expensesController.pageSize = 1;
+    	
+    	List<ExpenseWrapper> expensesPage1 = expensesController.expenses;
+		System.assert(expensesPage1 != null);
+		System.assert(!expensesPage1.isempty());
+		Expense__c expensePage1 = expensesPage1.get(0).expenseC;
+    	
+    	expensesController.nextPage();
+    	
+    	List<ExpenseWrapper> expensesPage2 = expensesController.expenses;
+		System.assert(expensesPage2 != null);
+		System.assert(!expensesPage2.isempty());
+		Expense__c expensePage2 = expensesPage2.get(0).expenseC;
+		
+		System.assertNotEquals(expensePage1.Id, expensePage2.Id, 'Next page contains the same record');
+    	
+    	//call the previous page and assert it is the same record than expensePage1
+    	expensesController.previousPage();
+    	expensesPage1 = expensesController.expenses;
+		System.assert(expensesPage1 != null);
+		System.assert(!expensesPage1.isempty());
+		expensePage1 = expensesPage1.get(0).expenseC;
+		
+		System.assertEquals(expensePage1.Id, expensePage1.Id, 'previous page does not contain the same record than the page 1');
      }
      
      
